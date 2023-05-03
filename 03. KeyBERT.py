@@ -43,8 +43,16 @@ for filename in tqdm(file_list):
     d_keywords[filename] = [x[0] for x in keywords]
 
 
-with open("Keyphrases_KeyBERT.json", "w", encoding="utf-8") as outfile:
+
+
+# Output directory
+output_dir = 'Extracted_keyphrases/'
+if (not os.path.exists(output_dir)):
+    os.mkdir(output_dir)
+
+with open(output_dir + "Keyphrases_KeyBERT.json", "w", encoding="utf-8") as outfile:
     json.dump(d_keywords, outfile, ensure_ascii=False)
+
 
 
 

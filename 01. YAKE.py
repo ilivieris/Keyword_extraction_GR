@@ -66,8 +66,12 @@ for filename in tqdm(file_list):
     d_keywords[filename] = [x[0] for x in keywords if len(x[0]) > 3 and selected_keywords(x[0]) and percentage_upper_chars(x[0]) < 0.7]
 
 
+# Output directory
+output_dir = 'Extracted_keyphrases/'
+if (not os.path.exists(output_dir)):
+    os.mkdir(output_dir)
 
-with open("Keyphrases_YAKE.json", "w", encoding="utf-8") as outfile:
+with open(output_dir + "Keyphrases_YAKE.json", "w", encoding="utf-8") as outfile:
     json.dump(d_keywords, outfile, ensure_ascii=False)
 
 

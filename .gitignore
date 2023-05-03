@@ -8,6 +8,11 @@ __pycache__/
 
 # Data
 Data/
+Data/*
+
+# Extracted keyphrases
+Extracted_keyphrases/
+Extracted_keyphrases/*
 
 # Distribution / packaging
 .Python

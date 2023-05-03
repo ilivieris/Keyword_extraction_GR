@@ -81,8 +81,14 @@ for filename in tqdm(file_list):
     # Store keywords/keyphrases
     d_keywords[filename] = keywords
 
+    
+    
+# Output directory
+output_dir = 'Extracted_keyphrases/'
+if (not os.path.exists(output_dir)):
+    os.mkdir(output_dir)
 
-with open("Keyphrases_Spacy.json", "w", encoding="utf-8") as outfile:
+with open(output_dir + "Keyphrases_Spacy.json", "w", encoding="utf-8") as outfile:
     json.dump(d_keywords, outfile, ensure_ascii=False)
 
 
