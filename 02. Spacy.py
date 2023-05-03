@@ -78,8 +78,8 @@ for filename in tqdm(file_list):
     # Get keywords/keyphrases
     keywords = extract_keywords(nlp=nlp, doc=doc, max_number_of_keywords=10)
 
+    # Store keywords/keyphrases
     d_keywords[filename] = keywords
-    print(keywords)
 
 
 with open("Keyphrases_Spacy.json", "w", encoding="utf-8") as outfile:

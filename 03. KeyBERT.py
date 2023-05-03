@@ -39,8 +39,8 @@ for filename in tqdm(file_list):
                                      use_maxsum=False,
                                      use_mmr=True, diversity=0.1);
 
+    # Store keywords/keyphrases
     d_keywords[filename] = [x[0] for x in keywords]
-    print(d_keywords[filename])
 
 
 with open("Keyphrases_KeyBERT.json", "w", encoding="utf-8") as outfile:

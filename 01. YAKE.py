@@ -62,7 +62,7 @@ for filename in tqdm(file_list):
     # Get keywords/keyphrases
     keywords = kw_extractor.extract_keywords(doc)
 
-    # Todo: clean keywords
+    # Store keywords/keyphrases
     d_keywords[filename] = [x[0] for x in keywords if len(x[0]) > 3 and selected_keywords(x[0]) and percentage_upper_chars(x[0]) < 0.7]
 
 
