@@ -5,6 +5,7 @@ from keybert import KeyBERT
 # You can select any model from sentence-transformers 
 # (https://www.sbert.net/docs/pretrained_models.html) 
 # and pass it through KeyBERT with model:
+# kw_model = KeyBERT(model='nlpaueb/bert-base-greek-uncased-v1')
 kw_model = KeyBERT(model='paraphrase-multilingual-MiniLM-L12-v2')
 
 
@@ -41,7 +42,6 @@ for filename in tqdm(file_list):
 
     # Store keywords/keyphrases
     d_keywords[filename] = [x[0] for x in keywords]
-
 
 
 
