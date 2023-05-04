@@ -66,8 +66,12 @@ nlp = spacy.load("el_core_news_sm")
 nlp.add_pipe("textrank")
 
 
+
+
+
 # Main loop
-for directory in tqdm(directories_list):
+loop_directories = tqdm(directories_list, leave=True)
+for directory in loop_directories:
     # Set path & output file
     path = f'{data_path}/{directory}'
     output_file = f'{output_dir}/Keyphrases-Spacy-{directory}.json'
@@ -106,3 +110,6 @@ for directory in tqdm(directories_list):
 
     with open(output_file, "w", encoding="utf-8") as outfile:
         json.dump(d_keywords, outfile, ensure_ascii=False)
+
+    # Update TQDM
+    loop_files.set_description(f"Directory: {directory}")
