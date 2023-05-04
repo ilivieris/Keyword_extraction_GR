@@ -74,7 +74,7 @@ for directory in loop_directories:
         json.dump(d_keywords, outfile, ensure_ascii=False)
 
     # Update TQDM
-    loop_files.set_description(f"Directory: {directory}")
+    loop_directories.set_description(f"Directory: {directory}")
 
 
 
