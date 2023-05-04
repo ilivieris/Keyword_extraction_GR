@@ -3,7 +3,6 @@ import yake
 import json 
 from tqdm import tqdm
 
-
 def selected_keywords(word:str=None) -> bool:
       '''
         Gets a word and returns if it should be usef as a keyword
@@ -39,40 +38,61 @@ def percentage_upper_chars(string):
 
 
 
+# Output directory
+output_dir = 'Extracted_keyphrases/'
+if (not os.path.exists(output_dir)):
+    print(f'[INFO] Output directory ({output_dir}) created')
+    os.mkdir(output_dir)
 
 
 # Data path
 data_path = 'Data'
 
-file_list = []
-for root, dirs, files in os.walk(data_path):
-	for file in files:
-        # Append the file name to the list
-		file_list.append(os.path.join(root, file))
+# Get directories containing FEKs
+directories_list = [f for f in os.listdir(data_path) if os.path.isdir(os.path.join(data_path, f))]
 
 # Setup keywords extractor
 kw_extractor = yake.KeywordExtractor()
 
-d_keywords = dict()
-for filename in tqdm(file_list):
-    # Open file
-    with open(filename, encoding="utf-8") as f:
-        doc = f.read()	
 
-    # Get keywords/keyphrases
-    keywords = kw_extractor.extract_keywords(doc)
+# Main loop
+for directory in tqdm(directories_list):
+    # Set path & output file
+    path = f'{data_path}/{directory}'
+    output_file = f'{output_dir}/Keyphrases-YAKE-{directory}.json'
 
-    # Store keywords/keyphrases
-    d_keywords[filename] = [x[0] for x in keywords if len(x[0]) > 3 and selected_keywords(x[0]) and percentage_upper_chars(x[0]) < 0.7]
+    # Check if the file containing the keywords have been already created 
+    if os.path.isfile(output_file):
+        d_keywords = json.load(open(output_file, encoding="utf8")) 
+    else:
+        d_keywords = dict()
 
-
-# Output directory
-output_dir = 'Extracted_keyphrases/'
-if (not os.path.exists(output_dir)):
-    os.mkdir(output_dir)
-
-with open(output_dir + "Keyphrases_YAKE.json", "w", encoding="utf-8") as outfile:
-    json.dump(d_keywords, outfile, ensure_ascii=False)
+    # Get files
+    files_list = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
 
 
 
+    loop_files = tqdm(files_list, leave=True)
+    for idx, filename in enumerate(loop_files):
+        # Check if the keywords have been already extracted for this document
+        if (filename in d_keywords):
+            continue
+        
+        # Open file
+        with open(os.path.join(path, filename), encoding="utf-8") as f:
+            doc = f.read()	
+
+        # Get keywords/keyphrases
+        keywords = kw_extractor.extract_keywords(doc)
+
+        # Store keywords/keyphrases
+        d_keywords[filename] = [x[0] for x in keywords if len(x[0]) > 3 and selected_keywords(x[0]) and percentage_upper_chars(x[0]) < 0.7]
+
+
+        # Update TQDM
+        loop_files.set_description(f"File: {filename} [{idx}/{len(files_list)}]")
+
+       
+
+    with open(output_file, "w", encoding="utf-8") as outfile:
+        json.dump(d_keywords, outfile, ensure_ascii=False)

@@ -7,51 +7,73 @@ from keybert import KeyBERT
 # and pass it through KeyBERT with model:
 # kw_model = KeyBERT(model='nlpaueb/bert-base-greek-uncased-v1')
 kw_model = KeyBERT(model='paraphrase-multilingual-MiniLM-L12-v2')
+print('[INFO] Model loaded')
 
-
-
+# Output directory
+output_dir = 'Extracted_keyphrases/'
+if (not os.path.exists(output_dir)):
+    print(f'[INFO] Output directory ({output_dir}) created')
+    os.mkdir(output_dir)
 
 
 # Data path
 data_path = 'Data'
 
-file_list = []
-for root, dirs, files in os.walk(data_path):
-	for file in files:
-        # Append the file name to the list
-		file_list.append(os.path.join(root, file))
+# Get directories containing FEKs
+directories_list = [f for f in os.listdir(data_path) if os.path.isdir(os.path.join(data_path, f))]
 
 
 
 
+# Main loop
+for directory in tqdm(directories_list):
+    # Set path & output file
+    path = f'{data_path}/{directory}'
+    output_file = f'{output_dir}/Keyphrases-KeyBERT-{directory}.json'
 
-d_keywords = dict()
-for filename in tqdm(file_list):
-    # Open file
-    with open(filename, encoding="utf-8") as f:
-        doc = f.read()	
+    # Check if the file containing the keywords have been already created 
+    if os.path.isfile(output_file):
+        d_keywords = json.load(open(output_file, encoding="utf8")) 
+    else:
+        d_keywords = dict()
 
-    # Get keywords/keyphrases
-    keywords = kw_model.extract_keywords(doc, 
-                                     keyphrase_ngram_range=(1, 2), 
-                                     stop_words='english', 
-                                     highlight=False,
-                                     top_n=20,
-                                     use_maxsum=False,
-                                     use_mmr=True, diversity=0.1);
-
-    # Store keywords/keyphrases
-    d_keywords[filename] = [x[0] for x in keywords]
+    # Get files
+    files_list = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
 
 
 
-# Output directory
-output_dir = 'Extracted_keyphrases/'
-if (not os.path.exists(output_dir)):
-    os.mkdir(output_dir)
+    loop_files = tqdm(files_list, leave=True)
+    for idx, filename in enumerate(loop_files):
+        # Check if the keywords have been already extracted for this document
+        if (filename in d_keywords):
+            continue
+        
+        # Open file
+        with open(os.path.join(path, filename), encoding="utf-8") as f:
+            doc = f.read()	
 
-with open(output_dir + "Keyphrases_KeyBERT.json", "w", encoding="utf-8") as outfile:
-    json.dump(d_keywords, outfile, ensure_ascii=False)
+        # Get keywords/keyphrases
+        keywords = kw_model.extract_keywords(doc, 
+                                        keyphrase_ngram_range=(1, 2), 
+                                        stop_words='english', 
+                                        highlight=False,
+                                        top_n=20,
+                                        use_maxsum=False,
+                                        use_mmr=True, diversity=0.2);
+
+        # Store keywords/keyphrases
+        d_keywords[filename] = [x[0] for x in keywords]
+
+        # Update TQDM
+        loop_files.set_description(f"File: {filename} [{idx}/{len(files_list)}]")
+
+       
+
+    with open(output_file, "w", encoding="utf-8") as outfile:
+        json.dump(d_keywords, outfile, ensure_ascii=False)
+
+
+
 
 
 
