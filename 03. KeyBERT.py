@@ -28,6 +28,9 @@ directories_list = [f for f in os.listdir(data_path) if os.path.isdir(os.path.jo
 # Main loop
 loop_directories = tqdm(directories_list, leave=True)
 for directory in loop_directories:
+    # Update TQDM
+    loop_directories.set_description(f"Directory: {directory}")
+
     # Set path & output file
     path = f'{data_path}/{directory}'
     output_file = f'{output_dir}/Keyphrases-KeyBERT-{directory}.json'
@@ -45,6 +48,9 @@ for directory in loop_directories:
 
     loop_files = tqdm(files_list, leave=True)
     for idx, filename in enumerate(loop_files):
+        # Update TQDM
+        loop_files.set_description(f"File: {filename} [{idx}/{len(files_list)}]")
+                
         # Check if the keywords have been already extracted for this document
         if (filename in d_keywords):
             continue
@@ -54,27 +60,28 @@ for directory in loop_directories:
             doc = f.read()	
 
         # Get keywords/keyphrases
-        keywords = kw_model.extract_keywords(doc, 
-                                        keyphrase_ngram_range=(1, 2), 
-                                        stop_words='english', 
-                                        highlight=False,
-                                        top_n=20,
-                                        use_maxsum=False,
-                                        use_mmr=True, diversity=0.2);
+        try:
+            keywords = kw_model.extract_keywords(doc, 
+                                            keyphrase_ngram_range=(1, 2), 
+                                            stop_words='english', 
+                                            highlight=False,
+                                            top_n=20,
+                                            use_maxsum=False,
+                                            use_mmr=True, diversity=0.2);
 
-        # Store keywords/keyphrases
-        d_keywords[filename] = [x[0] for x in keywords]
+            # Store keywords/keyphrases
+            d_keywords[filename] = [x[0] for x in keywords]
+        except Exception as e:
+            print(f'[ERROR] {e}')
 
-        # Update TQDM
-        loop_files.set_description(f"File: {filename} [{idx}/{len(files_list)}]")
-
+        if idx%500 == 0:
+            with open(output_file, "w", encoding="utf-8") as outfile:
+                json.dump(d_keywords, outfile, ensure_ascii=False)
        
 
     with open(output_file, "w", encoding="utf-8") as outfile:
         json.dump(d_keywords, outfile, ensure_ascii=False)
 
-    # Update TQDM
-    loop_directories.set_description(f"Directory: {directory}")
 
 
 
