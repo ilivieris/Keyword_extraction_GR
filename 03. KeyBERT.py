@@ -62,12 +62,12 @@ for directory in loop_directories:
         # Get keywords/keyphrases
         try:
             keywords = kw_model.extract_keywords(doc, 
-                                            keyphrase_ngram_range=(1, 2), 
+                                            keyphrase_ngram_range=(1, 3), 
                                             stop_words='english', 
                                             highlight=False,
                                             top_n=20,
                                             use_maxsum=False,
-                                            use_mmr=True, diversity=0.2);
+                                            use_mmr=True, diversity=0.3);
 
             # Store keywords/keyphrases
             d_keywords[filename] = [x[0] for x in keywords]
