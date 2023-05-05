@@ -72,6 +72,9 @@ nlp.add_pipe("textrank")
 # Main loop
 loop_directories = tqdm(directories_list, leave=True)
 for directory in loop_directories:
+    # Update TQDM
+    loop_directories.set_description(f"Directory: {directory}")
+
     # Set path & output file
     path = f'{data_path}/{directory}'
     output_file = f'{output_dir}/Keyphrases-Spacy-{directory}.json'
@@ -89,6 +92,9 @@ for directory in loop_directories:
 
     loop_files = tqdm(files_list, leave=True)
     for idx, filename in enumerate(loop_files):
+        # Update TQDM
+        loop_files.set_description(f"File: {filename} [{idx}/{len(files_list)}]")
+
         # Check if the keywords have been already extracted for this document
         if (filename in d_keywords):
             continue
@@ -103,13 +109,6 @@ for directory in loop_directories:
         # Store keywords/keyphrases
         d_keywords[filename] = keywords
 
-        # Update TQDM
-        loop_files.set_description(f"File: {filename} [{idx}/{len(files_list)}]")
-
-       
 
     with open(output_file, "w", encoding="utf-8") as outfile:
         json.dump(d_keywords, outfile, ensure_ascii=False)
-
-    # Update TQDM
-    loop_directories.set_description(f"Directory: {directory}")
