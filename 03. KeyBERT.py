@@ -50,11 +50,7 @@ for directory in loop_directories:
     for idx, filename in enumerate(loop_files):
         # Update TQDM
         loop_files.set_description(f"File: {filename} [{idx}/{len(files_list)}]")
-<<<<<<< HEAD
                 
-=======
-
->>>>>>> bc9d2b6446b6f8e6b34f170cf454713d0dd44f65
         # Check if the keywords have been already extracted for this document
         if (filename in d_keywords):
             continue
@@ -73,16 +69,10 @@ for directory in loop_directories:
                                             use_maxsum=False,
                                             use_mmr=True, diversity=0.2);
 
-<<<<<<< HEAD
             # Store keywords/keyphrases
             d_keywords[filename] = [x[0] for x in keywords]
         except Exception as e:
             print(f'[ERROR] {e}')
-=======
-        # Store keywords/keyphrases
-        d_keywords[filename] = [x[0] for x in keywords]
-
->>>>>>> bc9d2b6446b6f8e6b34f170cf454713d0dd44f65
 
         if idx%500 == 0:
             with open(output_file, "w", encoding="utf-8") as outfile:
@@ -92,10 +82,6 @@ for directory in loop_directories:
     with open(output_file, "w", encoding="utf-8") as outfile:
         json.dump(d_keywords, outfile, ensure_ascii=False)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> bc9d2b6446b6f8e6b34f170cf454713d0dd44f65
 
 
 
