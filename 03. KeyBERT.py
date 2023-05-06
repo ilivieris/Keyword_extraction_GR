@@ -5,8 +5,8 @@ from keybert import KeyBERT
 # You can select any model from sentence-transformers 
 # (https://www.sbert.net/docs/pretrained_models.html) 
 # and pass it through KeyBERT with model:
-# kw_model = KeyBERT(model='nlpaueb/bert-base-greek-uncased-v1')
-kw_model = KeyBERT(model='paraphrase-multilingual-MiniLM-L12-v2')
+kw_model = KeyBERT(model='nlpaueb/bert-base-greek-uncased-v1')
+# kw_model = KeyBERT(model='paraphrase-multilingual-MiniLM-L12-v2')
 print('[INFO] Model loaded')
 
 # Output directory
@@ -62,7 +62,7 @@ for directory in loop_directories:
         # Get keywords/keyphrases
         try:
             keywords = kw_model.extract_keywords(doc, 
-                                            keyphrase_ngram_range=(1, 3), 
+                                            keyphrase_ngram_range=(1, 2), 
                                             stop_words='english', 
                                             highlight=False,
                                             top_n=20,
@@ -74,7 +74,7 @@ for directory in loop_directories:
         except Exception as e:
             print(f'[ERROR] {e}')
 
-        if idx%500 == 0:
+        if idx%300 == 0:
             with open(output_file, "w", encoding="utf-8") as outfile:
                 json.dump(d_keywords, outfile, ensure_ascii=False)
        
