@@ -2,6 +2,15 @@
 
 This repository parses a series of documents and extracts their keywords. The keywords of each document is stored in a JSON file
 
+<br/>
+
+## Methodologies
+---
+
+- **YAKE**: Keywords extraction using YAKE package
+- **Spacy**: Keywords extraction using Spacy package by excluding the top-ranked phrases in the document
+- **KeyBERT**: Keyword extraction using KeyBERT and two Greek LLM models
+- **Hybrid**: Keywods extraction using (i) KeyBERT and two Greek LLM models and (ii) Spacy by excluding the top-ranked phrases
 
 <br/>
 
@@ -38,6 +47,7 @@ Every issue contains multiple legal texts.
     01. YAKE.ipynb
     02. Spacy.ipynb
     03. KeyBERT.ipynb
+    04. Hybrid.ipynb
 ```
 
 <br/>

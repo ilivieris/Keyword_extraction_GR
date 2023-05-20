@@ -39,7 +39,7 @@ for directory in loop_directories:
 
     # Set path & output file
     path = f'{data_path}/{directory}'
-    output_file = f'{output_dir}/Keyphrases-KeyBERT-{directory}.json'
+    output_file = f'{output_dir}/Keyphrases-Hybrid-{directory}.json'
 
     # Check if the file containing the keywords have been already created 
     if os.path.isfile(output_file):

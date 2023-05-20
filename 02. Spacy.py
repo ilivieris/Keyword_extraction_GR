@@ -4,45 +4,8 @@ import pytextrank
 import json 
 from tqdm import tqdm
 # Installation: python -m spacy download el_core_news_sm
-
-def percentage_upper_chars(string):
-    '''
-        Counts the percentage of upper characters in a word
-
-        Parameters
-        ----------
-        string: Word
-
-        Returns
-        -------
-        percentage of upper characters in a word
-    '''
-    return sum(map(str.isupper, string))/len(string)
-
-def extract_keywords(nlp=None, doc:str=None, max_number_of_keywords:int=20):
-    '''
-        Given a text, returns the keywords
-
-        Parameters
-        ----------
-        nlp: spacy functionality
-        doc: Text
-        max_number_of_keywords: maximum number of keywords
-
-        Returns:
-        --------
-        A list with keywords
-    '''
-    doc = doc.replace('\n', ' ')
-    result = nlp(doc)
-    
-    # examine the top-ranked phrases in the document
-    keywords = list()
-    for phrase in result._.phrases:
-        if len(phrase.text) > 3 and percentage_upper_chars(phrase.text) < 0.2:
-            keywords.append(phrase.text) 
-
-    return keywords[:max_number_of_keywords]
+from utils.extract_keywords_spacy import extract_keywords_spacy
+from utils.utils import percentage_upper_chars
 
 
 

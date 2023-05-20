@@ -1,6 +1,20 @@
 import spacy
 from spacy.matcher import Matcher
 
+def percentage_upper_chars(string):
+    '''
+        Counts the percentage of upper characters in a word
+
+        Parameters
+        ----------
+        string: Word
+
+        Returns
+        -------
+        percentage of upper characters in a word
+    '''
+    return sum(map(str.isupper, string))/len(string)
+
 def clean_keyword(keyword):
     parts = keyword.split(' ')
 
