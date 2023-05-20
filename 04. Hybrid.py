@@ -26,13 +26,13 @@ data_path = 'Data'
 directories_list = [f for f in os.listdir(data_path) if os.path.isdir(os.path.join(data_path, f))]
 
 # Spacy model
-nlp = spacy.load("el_core_news_sm")
+nlp = spacy.load("el_core_news_lg")
 # Add PyTextRank to the spaCy pipeline
 nlp.add_pipe("textrank")
 
 
 # Main loop
-loop_directories = tqdm(directories_list[:1], leave=True)#LIVIERIS
+loop_directories = tqdm(directories_list[:1], leave=True)
 for directory in loop_directories:
     # Update TQDM
     loop_directories.set_description(f"Directory: {directory}")
@@ -52,8 +52,9 @@ for directory in loop_directories:
 
 
 
-    loop_files = tqdm(files_list[:10], leave=True) #LIVIERIS
+    loop_files = tqdm(files_list[:10], leave=True)
     for idx, filename in enumerate(loop_files):
+
         # Update TQDM
         loop_files.set_description(f"File: {filename} [{idx}/{len(files_list)}]")
                 
@@ -85,6 +86,9 @@ for directory in loop_directories:
             keywords = [(clean_keyword(item[0]), item[1]) for item in keywords]
             # Keyword cleaning (2)
             keywords = [keyword for keyword in keywords if match(nlp, keyword[0])]
+            # Keyword clearning (3)
+            keywords = [(' '.join(keyword.split(' ')[1:]), keyword[1]) if nlp(keyword[0])[0].pos_ in ['DET','ADP'] else keyword for keyword in keywords]
+
             # Store keywords/keyphrases
             d_keywords[filename] = [{'keyword':x[0], 'score_1':x[1]} for x in keywords]
         except Exception as e:
@@ -107,6 +111,9 @@ for directory in loop_directories:
             keywords = [(clean_keyword(item[0]), item[1]) for item in keywords]
             # Keyword cleaning (2)
             keywords = [keyword for keyword in keywords if match(nlp, keyword[0])]
+            # Keyword clearning (3)
+            keywords = [(' '.join(keyword.split(' ')[1:]), keyword[1]) if nlp(keyword[0])[0].pos_ in ['DET','ADP'] else keyword for keyword in keywords]
+
             # Store keywords/keyphrases
             d_keywords[filename] += [{'keyword':x[0], 'score_2':x[1]} for x in keywords]
         except Exception as e:
@@ -122,6 +129,9 @@ for directory in loop_directories:
             keywords = [clean_keyword(item) for item in keywords]
             # Keyword cleaning (2)
             keywords = [keyword for keyword in keywords if match(nlp, keyword)]
+            # Keyword cleaning (3)
+            keywords = [' '.join(keyword.split(' ')[1:]) if nlp(keyword)[0].pos_ in ['DET','ADP'] else keyword for keyword in keywords]
+
             # Store keywords/keyphrases
             d_keywords[filename] += [{'keyword':x, 'score_3':'NaN'} for x in keywords]
         except Exception as e:
@@ -129,7 +139,7 @@ for directory in loop_directories:
 
 
 
-        if idx%300 == 0:
+        if idx%100 == 0:
             with open(output_file, "w", encoding="utf-8") as outfile:
                 json.dump(d_keywords, outfile, ensure_ascii=False)
 
