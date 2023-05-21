@@ -33,7 +33,7 @@ nlp.add_pipe("textrank")
 
 
 # Main loop
-loop_directories = tqdm(directories_list[:1], leave=True)
+loop_directories = tqdm(directories_list, leave=True)
 for directory in loop_directories:
     # Update TQDM
     loop_directories.set_description(f"Directory: {directory}")
@@ -53,7 +53,7 @@ for directory in loop_directories:
 
 
 
-    loop_files = tqdm(files_list[:5], leave=True)
+    loop_files = tqdm(files_list, leave=True)
     for idx, filename in enumerate(loop_files):
 
         # Update TQDM
