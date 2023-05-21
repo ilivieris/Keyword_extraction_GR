@@ -5,7 +5,7 @@ from keybert import KeyBERT
 # You can select any model from sentence-transformers 
 # (https://www.sbert.net/docs/pretrained_models.html) 
 # and pass it through KeyBERT with model:
-kw_model = KeyBERT(model='nlpaueb/bert-base-greek-uncased-v1')
+kw_model = KeyBERT(model='lighteternal/stsb-xlm-r-greek-transfer')
 # kw_model = KeyBERT(model='paraphrase-multilingual-MiniLM-L12-v2')
 print('[INFO] Model loaded')
 

@@ -8,8 +8,9 @@ from utils.extract_keywords_spacy import extract_keywords_spacy
 # You can select any model from sentence-transformers 
 # (https://www.sbert.net/docs/pretrained_models.html) 
 # and pass it through KeyBERT with model:
-kw_model_1 = KeyBERT(model='nlpaueb/bert-base-greek-uncased-v1')
+kw_model_1 = KeyBERT(model='lighteternal/stsb-xlm-r-greek-transfer')
 kw_model_2 = KeyBERT(model='paraphrase-multilingual-MiniLM-L12-v2')
+
 print('[INFO] Model loaded')
 
 # Output directory
@@ -52,7 +53,7 @@ for directory in loop_directories:
 
 
 
-    loop_files = tqdm(files_list[:10], leave=True)
+    loop_files = tqdm(files_list[:5], leave=True)
     for idx, filename in enumerate(loop_files):
 
         # Update TQDM
@@ -92,7 +93,8 @@ for directory in loop_directories:
             # Store keywords/keyphrases
             d_keywords[filename] = [{'keyword':x[0], 'score_1':x[1]} for x in keywords]
         except Exception as e:
-            print(f'[ERROR] {e}')
+            print(f'[ERROR] Approach 1 - Filename: {filename}')
+            print(f'{e}')
 
 
 
@@ -117,7 +119,8 @@ for directory in loop_directories:
             # Store keywords/keyphrases
             d_keywords[filename] += [{'keyword':x[0], 'score_2':x[1]} for x in keywords]
         except Exception as e:
-            print(f'[ERROR] {e}')
+            print(f'[ERROR] Approach 2 - Filename: {filename}')
+            print(f'{e}')
 
 
         # Spacy
@@ -129,13 +132,15 @@ for directory in loop_directories:
             keywords = [clean_keyword(item) for item in keywords]
             # Keyword cleaning (2)
             keywords = [keyword for keyword in keywords if match(nlp, keyword)]
-            # Keyword cleaning (3)
+            # Keyword cleaning (3) - Two times!
+            keywords = [' '.join(keyword.split(' ')[1:]) if nlp(keyword)[0].pos_ in ['DET','ADP'] else keyword for keyword in keywords]
             keywords = [' '.join(keyword.split(' ')[1:]) if nlp(keyword)[0].pos_ in ['DET','ADP'] else keyword for keyword in keywords]
 
             # Store keywords/keyphrases
             d_keywords[filename] += [{'keyword':x, 'score_3':'NaN'} for x in keywords]
         except Exception as e:
-            print(f'[ERROR] {e}')
+            print(f'[ERROR] Approach 3 - Filename: {filename}')
+            print(f'{e}')
 
 
 
