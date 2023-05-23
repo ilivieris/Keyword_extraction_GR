@@ -59,7 +59,7 @@ for directory in loop_directories:
 
     loop_files = tqdm(files_list, leave=True)
     for idx, filename in enumerate(loop_files):
-        if '1_19920113_01_0001_miuEdit' not in filename: continue
+
         # Update TQDM
         loop_files.set_description(f"File: {filename} [{idx}/{len(files_list)}]")
                 
