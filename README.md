@@ -10,6 +10,7 @@ This repository parses a series of documents and extracts their keywords. The ke
 - **YAKE**: Keywords extraction using YAKE package
 - **Spacy**: Keywords extraction using Spacy package by excluding the top-ranked phrases in the document
 - **KeyBERT**: Keyword extraction using KeyBERT and two Greek LLM models
+- **LMRank**: Keywords extraction using LMRank methodology
 - **Hybrid**: Keywods extraction using (i) KeyBERT and two Greek LLM models and (ii) Spacy by excluding the top-ranked phrases
 
 <br/>
@@ -44,10 +45,11 @@ Every issue contains multiple legal texts.
 
 4. Run
 ```
-    01. YAKE.ipynb
-    02. Spacy.ipynb
-    03. KeyBERT.ipynb
-    04. Hybrid.ipynb
+    python '.\01. YAKE.py'
+    python '.\02. Spacy.py'
+    python '.\03. KeyBERT.py'
+    python '.\04. LMRank.py'
+    python '.\05. Hybrid.py'
 ```
 
 <br/>
@@ -59,6 +61,7 @@ Every issue contains multiple legal texts.
 - tqdm==4.61.0
 - spacy==3.2.4
 - yake==0.4.8
+- faiss==1.7.2
 
 <br/>
 

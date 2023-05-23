@@ -53,7 +53,8 @@ class KeyBERT:
                       * https://www.sbert.net/docs/pretrained_models.html
         """
         self.model = select_backend(model)
-
+        print(f'[INFO] Model: {model} loaded')
+        
     def extract_keywords(
         self,
         docs: Union[str, List[str]],
