@@ -32,6 +32,11 @@ nlp = spacy.load("el_core_news_lg")
 nlp.add_pipe("textrank")
 
 
+
+
+
+
+
 # Main loop
 loop_directories = tqdm(directories_list, leave=True)
 for directory in loop_directories:
@@ -71,6 +76,8 @@ for directory in loop_directories:
         text = text.replace('\n', '. ')
         text = text.replace('\t', '. ')
 
+        # Initilization
+        d_keywords[filename] = []
 
         # nlpaueb/bert-base-greek-uncased-v1
         # Get keywords/keyphrases
@@ -91,7 +98,7 @@ for directory in loop_directories:
             keywords = [(' '.join(keyword.split(' ')[1:]), keyword[1]) if nlp(keyword[0])[0].pos_ in ['DET','ADP'] else keyword for keyword in keywords]
 
             # Store keywords/keyphrases
-            d_keywords[filename] = [{'keyword':x[0], 'score_1':x[1]} for x in keywords]
+            d_keywords[filename] += [{'keyword':x[0], 'score_1':x[1]} for x in keywords]
         except Exception as e:
             print(f'[ERROR] Approach 1 - Filename: {filename}')
             print(f'{e}')

@@ -1,5 +1,12 @@
 import spacy
 from spacy.matcher import Matcher
+from nltk.corpus import stopwords
+# nltk.download('stopwords')
+from nltk.tokenize import word_tokenize
+
+import re
+pattern = re.compile(r'\b(' + r'|'.join(stopwords.words('english')) + r')\b\s*')
+
 
 def percentage_upper_chars(string):
     '''
@@ -15,15 +22,32 @@ def percentage_upper_chars(string):
     '''
     return sum(map(str.isupper, string))/len(string)
 
+
+def remove_stopping_words(text):
+    '''
+        Remove stopping words from text
+
+        Parameters
+        ----------
+        text: input text
+
+        Returns
+        -------
+        text with removed stopping words
+    '''    
+    return pattern.sub('', text)
+
 def clean_keyword(keyword):
     parts = keyword.split(' ')
 
     if parts[0][-1] == '.' or parts[0][0] == '.': 
-        return ' '.join(parts[1:])
+        keyword = ' '.join(parts[1:])
     elif parts[0][0] == ',':
-        return ' '.join(parts[2:])
-    else:
-        return keyword
+        keyword = ' '.join(parts[2:])
+
+    keyword = remove_stopping_words(keyword)
+
+    return keyword
 
 
 def match(nlp, keyword):
@@ -66,5 +90,3 @@ def match(nlp, keyword):
     if len(matches) > 0:
         return True
     return False
-
-
